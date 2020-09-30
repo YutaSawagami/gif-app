@@ -1,6 +1,6 @@
 <template>
   <div class="mdl-textfield mdl-js-textfield">
-    <input placeholder="キーワード" @change="CHANGE_KEYWORD($event.target.value)" class="mdl-textfield__input" type="text" id="sample1">
+    <input placeholder="キーワードを入力してね" @change="CHANGE_KEYWORD($event.target.value)" class="mdl-textfield__input" type="text" id="sample1">
     <button @click="SEARCH" class="material-icons">search</button>
   </div>
 </template>

@@ -2,17 +2,15 @@
   <div id="app">
     <vue-header></vue-header>
     <br><br>
-    <time-line></time-line>
+    <router-view/>
   </div>
 </template>
 
 <script>
 import VueHeader from './components/Header'
-import TimeLine from './components/TimeLine'
 export default {
   components: {
-    VueHeader,
-    TimeLine
+    VueHeader
   }
 }
 </script>

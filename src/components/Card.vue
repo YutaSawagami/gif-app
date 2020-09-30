@@ -5,8 +5,10 @@
     </div>
     <div class="mdl-card__actions">
       <!--<span class="filename">{{gif.slug}}</span>-->
-      <button class="material-icons" style="margin-left:40%"
-       @click="favorite" v-bind:class="{favorite:isFavorite}">star</button>
+      <button v-if="this.$router.currentRoute.name === 'search' " class="material-icons favorite" style="margin-left:40%"
+       @click="favorite">star</button>
+       <button v-if="this.$router.currentRoute.name === 'favorites'" class="material-icons" style="margin-left:40%"
+       @click.ctrl='unfavorite' id="clear">clear</button>
     </div>
   </div>
 </template>
@@ -25,6 +27,9 @@ export default {
     favorite () {
       this.isFavorite = !this.isFavorite
       this.$store.dispatch('FAVORITE', this.gif)
+    },
+    unfavorite () {
+      this.$store.dispatch('DELETE', this.gif)
     }
   }
 }
@@ -53,5 +58,8 @@ export default {
 }
 .favorite {
   color:orange;
+}
+#clear {
+  color: red;
 }
 </style>
