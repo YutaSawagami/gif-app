@@ -2,8 +2,10 @@
 
   <main class="mdl-layout__content">
     <div class="page-content">
-        <br><br>
-      <card v-for="gif in favorites" :gif="gif" :key="gif.cid"></card>
+      <br><br>
+      <ul>
+        <card v-for="gif in favorites" :gif="gif" :key="gif.cid"></card>
+      </ul>
     </div>
     <p id="msg" v-if="favorites.length === 0">Search画面でお気に入り登録しよう！</p>
   </main>
@@ -27,4 +29,9 @@ export default {
     font-size: 50px;
     font-family:fantasy;
 }
+ul li {
+    float: left;
+    margin-right: 40px;
+     list-style: none;
+  }
 </style>

@@ -2,7 +2,6 @@
   <div class="mdl-layout mdl-js-layout mdl-layout--fixed-header">
     <header class="mdl-layout__header">
       <div class="mdl-layout__header-row">
-        <i class="material-icons">dehaze</i>
         <span class="mdl-layout-title">GIPHY-VUE</span>&nbsp;&nbsp;
         <router-link :to="{name: 'favorites'}" class="link"> FAVORITE GIFS</router-link>&nbsp;&nbsp;&nbsp;
         <router-link :to="{name: 'search'}"  class="link"> SEARCH GIFS</router-link>

@@ -1,6 +1,6 @@
 import Vuex from 'vuex'
 import Vue from 'vue'
-import { CHANGE_KEYWORD, SEARCH, FAVORITE, DELETE } from './mutation-types'
+import { CHANGE_KEYWORD, SEARCH, FAVORITE, DELETE, EXPAND, DISEXPAND } from './mutation-types'
 import axios from 'axios'
 
 Vue.use(Vuex)
@@ -20,7 +20,8 @@ Vue.use(Vuex)
 const state = {
   keyword: '',
   gifs: [],
-  favorites: []
+  favorites: [],
+  expandGif: []
 }
 
 const actions = {
@@ -28,11 +29,17 @@ const actions = {
     commit(CHANGE_KEYWORD, keyword)
   },
   [SEARCH] ({ commit, state }) {
-    axios.get('http://api.giphy.com/v1/gifs/search?q=' + state.keyword + '&api_key=6ttGOvcMC6k2CPxvCXv1qm2ijQRzZvP7&limit=20')
+    axios.get('https://api.giphy.com/v1/gifs/search?q=' + state.keyword + '&api_key=6ttGOvcMC6k2CPxvCXv1qm2ijQRzZvP7&limit=52')
       .then(response => {
         console.log(response.status) // 200
         commit(SEARCH, response.data.data)
       })
+  },
+  [EXPAND] ({ commit }, gif) {
+    commit(EXPAND, gif)
+  },
+  [DISEXPAND] ({ commit }) {
+    commit(DISEXPAND)
   },
   [FAVORITE] ({ commit }, gif) {
     const index = state.gifs.indexOf(gif)
@@ -45,6 +52,8 @@ const actions = {
       })
       if (douboutCount === 0) {
         commit(FAVORITE, { gif, index })
+      } else {
+        return 400
       }
     } else {
       commit(FAVORITE, { gif, index })
@@ -63,6 +72,14 @@ const mutations = {
   [SEARCH] (state, data) {
     state.gifs = data
   },
+  [EXPAND] (state, gif) {
+    state.expandGif.push(gif)
+    console.log(state.expandGif.length)
+  },
+  [DISEXPAND] (state) {
+    state.expandGif.length = 0
+    console.log(state.expandGif)
+  },
   [FAVORITE] (state, { gif, index }) {
     state.favorites.push(gif)
     state.gifs.splice(index, 1)
@@ -73,7 +90,9 @@ const mutations = {
 }
 const getters = {
   gifs: state => state.gifs,
-  favorites: state => state.favorites
+  expandGif: state => state.expandGif,
+  favorites: state => state.favorites,
+  keyword: state => state.keyword
 }
 
 export default new Vuex.Store({

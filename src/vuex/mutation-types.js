@@ -1,4 +1,6 @@
 export const CHANGE_KEYWORD = 'CHANGE_KEYWORD'
 export const SEARCH = 'SEARCH'
+export const EXPAND = 'EXPAND'
+export const DISEXPAND = 'DISEXPAND'
 export const FAVORITE = 'FAVORITE'
 export const DELETE = 'DELETE'
