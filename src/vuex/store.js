@@ -1,6 +1,8 @@
 import Vuex from 'vuex'
 import Vue from 'vue'
-import { CHANGE_KEYWORD, SEARCH, FAVORITE, DELETE, EXPAND, DISEXPAND } from './mutation-types'
+import firebase from 'firebase'
+import { CHANGE_KEYWORD, SEARCH, FAVORITE, DELETE, EXPAND, DISEXPAND, LOGIN, LOGOUT, SET_LOGIN_USER,
+  DELETE_LOGIN_USER, FETCH_GIFS } from './mutation-types'
 import axios from 'axios'
 
 Vue.use(Vuex)
@@ -21,7 +23,8 @@ const state = {
   keyword: '',
   gifs: [],
   favorites: [],
-  expandGif: []
+  expandGif: [],
+  login_user: null
 }
 
 const actions = {
@@ -63,6 +66,23 @@ const actions = {
     const index = state.favorites.indexOf(gif)
     console.log('index = ' + index)
     commit(DELETE, index)
+  },
+  [LOGIN] () {
+    const GoogleAuthProvider = new firebase.auth.GoogleAuthProvider()
+    firebase.auth().signInWithRedirect(GoogleAuthProvider)
+  },
+  [LOGOUT] () {
+    firebase.auth().signOut()
+  },
+  [SET_LOGIN_USER] ({ commit }, user) {
+    commit(SET_LOGIN_USER, user)
+  },
+  [DELETE_LOGIN_USER] ({ commit }) {
+    commit(DELETE_LOGIN_USER)
+  },
+  [FETCH_GIFS] ({ getters, commit }) {
+    firebase.firestore().collection(`users/${getters.login_user.uid}/gifs`).get().then(snapshot =>
+      snapshot.forEach(doc => commit(FAVORITE, doc.data())))
   }
 }
 const mutations = {
@@ -86,13 +106,23 @@ const mutations = {
   },
   [DELETE] (state, index) {
     state.favorites.splice(index, 1)
+  },
+  [SET_LOGIN_USER] (state, user) {
+    state.login_user = user
+    console.log('mutation SET LOGINUSER')
+    console.log(state.login_user)
+  },
+  [DELETE_LOGIN_USER] (state) {
+    console.log('mutation DELETE LOGINUSER')
+    state.login_user = null
   }
 }
 const getters = {
   gifs: state => state.gifs,
   expandGif: state => state.expandGif,
   favorites: state => state.favorites,
-  keyword: state => state.keyword
+  keyword: state => state.keyword,
+  login_user: state => state.login_user
 }
 
 export default new Vuex.Store({
