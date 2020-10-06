@@ -1,0 +1,17 @@
+[debug] [2020-10-06T05:17:38.066Z] ----------------------------------------------------------------------
+[debug] [2020-10-06T05:17:38.071Z] Command:       C:\Program Files\nodejs\node.exe C:\Users\ytmov\AppData\Roaming\npm\node_modules\firebase-tools\lib\bin\firebase.js hosting:disable
+[debug] [2020-10-06T05:17:38.072Z] CLI Version:   8.11.2
+[debug] [2020-10-06T05:17:38.072Z] Platform:      win32
+[debug] [2020-10-06T05:17:38.073Z] Node Version:  v12.18.3
+[debug] [2020-10-06T05:17:38.075Z] Time:          Tue Oct 06 2020 14:17:38 GMT+0900 (GMT+09:00)
+[debug] [2020-10-06T05:17:38.076Z] ----------------------------------------------------------------------
+[debug] [2020-10-06T05:17:38.076Z] 
+[debug] [2020-10-06T05:17:38.091Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2020-10-06T05:17:38.092Z] > authorizing via signed-in user
+[debug] [2020-10-06T05:17:38.096Z] [iam] checking project my-gify-app for permissions ["firebase.projects.get","firebasehosting.sites.update"]
+[debug] [2020-10-06T05:17:38.104Z] >>> HTTP REQUEST POST https://cloudresourcemanager.googleapis.com/v1/projects/my-gify-app:testIamPermissions  
+ {"permissions":["firebase.projects.get","firebasehosting.sites.update"]}
+[debug] [2020-10-06T05:17:38.588Z] <<< HTTP RESPONSE 200 {"content-type":"application/json; charset=UTF-8","vary":"X-Origin, Referer, Origin,Accept-Encoding","date":"Tue, 06 Oct 2020 05:17:34 GMT","server":"ESF","cache-control":"private","x-xss-protection":"0","x-frame-options":"SAMEORIGIN","x-content-type-options":"nosniff","server-timing":"gfet4t7; dur=120","alt-svc":"h3-Q050=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000,h3-27=\":443\"; ma=2592000,h3-T051=\":443\"; ma=2592000,h3-T050=\":443\"; ma=2592000,h3-Q046=\":443\"; ma=2592000,h3-Q043=\":443\"; ma=2592000,quic=\":443\"; ma=2592000; v=\"46,43\"","accept-ranges":"none","transfer-encoding":"chunked"}
+[debug] [2020-10-06T05:17:38.593Z] >>> HTTP REQUEST GET https://firebase.googleapis.com/v1beta1/projects/my-gify-app  
+ 
+[debug] [2020-10-06T05:17:39.295Z] <<< HTTP RESPONSE 200 {"content-type":"application/json; charset=UTF-8","vary":"X-Origin, Referer, Origin,Accept-Encoding","date":"Tue, 06 Oct 2020 05:17:35 GMT","server":"ESF","cache-control":"private","x-xss-protection":"0","x-frame-options":"SAMEORIGIN","x-content-type-options":"nosniff","alt-svc":"h3-Q050=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000,h3-27=\":443\"; ma=2592000,h3-T051=\":443\"; ma=2592000,h3-T050=\":443\"; ma=2592000,h3-Q046=\":443\"; ma=2592000,h3-Q043=\":443\"; ma=2592000,quic=\":443\"; ma=2592000; v=\"46,43\"","accept-ranges":"none","transfer-encoding":"chunked"}
