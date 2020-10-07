@@ -8,9 +8,7 @@
         <a @click="logout" class="log" v-if="$store.state.login_user" style="cursor: pointer;"> ログアウト </a>
         <a @click="login" class="log" v-else style="cursor: pointer;"> ログイン </a>
         <span class="user-name" v-if="$store.state.login_user">ようこそ、{{login_user.displayName}}さん</span>
-        <span class="user-name" v-else>未ログイン</span>
-  <!--  <p class="title" v-if="$router.currentRoute.name == 'search'">Search</p>
-        <p class="title" v-else>Favorites</p> -->
+        <span class="user-name" v-else>未ログイン状態</span>
       </div>
     </header>
   </div>
@@ -25,6 +23,7 @@ export default {
     },
     logout () {
       this.$store.dispatch('LOGOUT')
+      this.$store.dispatch('CLEAN_FAVORITE_GIFS')
     }
   },
   created () { // onAuthStateChangedはsignInWithRedirectの後にトリガされる

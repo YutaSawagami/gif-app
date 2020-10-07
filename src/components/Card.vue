@@ -11,8 +11,8 @@
        @click="favorite">star</button>
        <span>{{warnMessage}}</span>
        <button v-if="this.$router.currentRoute.name === 'favorites'" class="material-icons" style="margin-left:40%"
-       @click.ctrl='unfavorite' id="clear">clear</button>
-       <span id="delete-msg" v-if="this.$router.currentRoute.name === 'favorites'">(ctrl押しながら)</span>
+       @click='unfavorite' id="clear">clear</button>
+       <span id="delete-msg" v-if="this.$router.currentRoute.name === 'favorites'"></span>
     </div>
   </div>
   </li>
@@ -31,11 +31,15 @@ export default {
   },
   methods: {
     favorite () {
-      this.isFavorite = !this.isFavorite
-      this.$store.dispatch('FAVORITE', this.gif)
+      if (confirm('お気に入り登録しますか？')) {
+        // this.isFavorite = !this.isFavorite
+        this.$store.dispatch('FAVORITE', this.gif)
+      }
     },
     unfavorite () {
-      this.$store.dispatch('DELETE', this.gif)
+      if (confirm('お気に入りから削除しますか？')) {
+        this.$store.dispatch('DELETE', this.gif)
+      }
     },
     expand () {
       this.$store.dispatch('EXPAND', this.gif)

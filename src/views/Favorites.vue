@@ -17,6 +17,11 @@ export default {
   components: {
     Card
   },
+  created () {
+    this.$store.dispatch('CLEAN_FAVORITE_GIFS')
+    this.$store.dispatch('FETCH_GIFS')
+    console.log('created() FECTH_GIFS')
+  },
   computed: {
     ...mapGetters(['favorites'])
   }

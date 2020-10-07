@@ -2,7 +2,7 @@ import Vuex from 'vuex'
 import Vue from 'vue'
 import firebase from 'firebase'
 import { CHANGE_KEYWORD, SEARCH, FAVORITE, DELETE, EXPAND, DISEXPAND, LOGIN, LOGOUT, SET_LOGIN_USER,
-  DELETE_LOGIN_USER, FETCH_GIFS } from './mutation-types'
+  DELETE_LOGIN_USER, FETCH_GIFS, ADD_FAVORITE_GIFS, CLEAN_FAVORITE_GIFS } from './mutation-types'
 import axios from 'axios'
 
 Vue.use(Vuex)
@@ -44,8 +44,15 @@ const actions = {
   [DISEXPAND] ({ commit }) {
     commit(DISEXPAND)
   },
-  [FAVORITE] ({ commit }, gif) {
+  [FAVORITE] ({ commit, getters }, gif) {
     const index = state.gifs.indexOf(gif)
+    console.log('index: ' + index)
+    if (getters.login_user.uid) {
+      gif.favoriteDate = new Date()
+      firebase.firestore().collection(`users/${getters.login_user.uid}/gifs`).doc(gif.id).set(gif)
+      commit(FAVORITE, index)
+    }
+    /*
     var douboutCount = 0
     if (state.favorites.length !== 0) {
       state.favorites.forEach((favoriteGif) => {
@@ -61,11 +68,15 @@ const actions = {
     } else {
       commit(FAVORITE, { gif, index })
     }
+    */
   },
-  [DELETE] ({ commit }, gif) {
+  [DELETE] ({ commit, getters }, gif) {
     const index = state.favorites.indexOf(gif)
     console.log('index = ' + index)
-    commit(DELETE, index)
+    if (getters.login_user.uid) {
+      firebase.firestore().collection(`users/${state.login_user.uid}/gifs`).doc(gif.id).delete()
+      commit(DELETE, index)
+    }
   },
   [LOGIN] () {
     const GoogleAuthProvider = new firebase.auth.GoogleAuthProvider()
@@ -81,8 +92,13 @@ const actions = {
     commit(DELETE_LOGIN_USER)
   },
   [FETCH_GIFS] ({ getters, commit }) {
-    firebase.firestore().collection(`users/${getters.login_user.uid}/gifs`).get().then(snapshot =>
-      snapshot.forEach(doc => commit(FAVORITE, doc.data())))
+    firebase.firestore().collection(`users/${state.login_user.uid}/gifs`).orderBy('favoriteDate', 'desc').get().then(snapshot =>
+      snapshot.forEach(doc => commit(ADD_FAVORITE_GIFS, doc.data()))
+    )
+    console.log('action FETCH_GIFS')
+  },
+  [CLEAN_FAVORITE_GIFS] ({ commit }) {
+    commit(CLEAN_FAVORITE_GIFS)
   }
 }
 const mutations = {
@@ -100,8 +116,9 @@ const mutations = {
     state.expandGif.length = 0
     console.log(state.expandGif)
   },
-  [FAVORITE] (state, { gif, index }) {
-    state.favorites.push(gif)
+  [FAVORITE] (state, index) {
+    // state.favorites.push(gif)
+    console.log('mutation index: ' + index)
     state.gifs.splice(index, 1)
   },
   [DELETE] (state, index) {
@@ -115,6 +132,14 @@ const mutations = {
   [DELETE_LOGIN_USER] (state) {
     console.log('mutation DELETE LOGINUSER')
     state.login_user = null
+  },
+  [ADD_FAVORITE_GIFS] (state, gif) {
+    state.favorites.push(gif)
+    console.log('ADD_FAVORITE_GIFS')
+  },
+  [CLEAN_FAVORITE_GIFS] (state) {
+    state.favorites = []
+    console.log('mutation CLEAN: ' + state.favorites)
   }
 }
 const getters = {
