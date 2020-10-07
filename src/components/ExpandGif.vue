@@ -1,7 +1,7 @@
 <template>
     <div id="modal-content">
         <img id="gif" :src="expandGif[0].images.downsized.url" alt="" />
-        <p><a id="modal-close" class="button-link" @click="this.disexpand">閉じる</a></p>
+        <p><a id="modal-close" class="button-link" @click="this.disexpand">CLOSE</a></p>
     </div>
 </template>
 <script>

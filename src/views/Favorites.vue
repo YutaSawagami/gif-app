@@ -3,19 +3,27 @@
   <main class="mdl-layout__content">
     <div class="page-content">
       <br><br>
+       <expand-gif  v-if="this.isExpand" class="modal" @disexpand="disexpand"></expand-gif>
       <ul>
-        <card v-for="gif in favorites" :gif="gif" :key="gif.cid"></card>
+        <card v-for="gif in favorites" :gif="gif" :key="gif.cid" @expand="expand"></card>
       </ul>
     </div>
     <p id="msg" v-if="favorites.length === 0">Search画面でお気に入り登録しよう！</p>
   </main>
 </template>
 <script>
+import ExpandGif from '../components/ExpandGif'
 import Card from '../components/Card'
 import { mapGetters } from 'vuex'
 export default {
   components: {
-    Card
+    Card,
+    ExpandGif
+  },
+  data () {
+    return {
+      isExpand: false
+    }
   },
   created () {
     this.$store.dispatch('CLEAN_FAVORITE_GIFS')
@@ -23,7 +31,16 @@ export default {
     console.log('created() FECTH_GIFS')
   },
   computed: {
-    ...mapGetters(['favorites'])
+    ...mapGetters(['favorites', 'expandGif'])
+  },
+  methods: {
+    expand () {
+      console.log('expand emit')
+      this.isExpand = true
+    },
+    disexpand () {
+      this.isExpand = false
+    }
   }
 }
 </script>
@@ -38,5 +55,13 @@ ul li {
     float: left;
     margin-right: 40px;
      list-style: none;
+  }
+.modal {
+    visibility: visible;
+    opacity: 1;
+    position: fixed;
+    top: 10%;
+    left: 25%;
+    display: block;
   }
 </style>

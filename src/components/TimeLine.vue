@@ -1,13 +1,13 @@
 <template>
-  <main class="mdl-layout__content">
+  <main class="mdl-layout__content" >
     <div class="page-content" ><br>
       <input-form></input-form>
-      <expand-gif v-if="this.isExpand" class="modal" @disexpand="disexpand"></expand-gif>
+          <expand-gif  v-if="this.isExpand" class="modal" @disexpand="disexpand"></expand-gif>
       <ul style="" id="content">
       <card v-for="gif in gifs" :gif="gif" :key="gif.index" @expand="expand">
       </card>
       </ul>
-    </div>
+      </div>
   </main>
 </template>
 
@@ -52,7 +52,8 @@ export default {
     width: 100%;
     margin: 0 auto;
   }
-  #content {
+  .sample :isExpand {
+    background-color: black;
   }
   .page-content {
     display: flex;
@@ -71,5 +72,6 @@ export default {
     position: fixed;
     top: 10%;
     left: 25%;
+    display: block;
   }
 </style>

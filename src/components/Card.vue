@@ -2,15 +2,15 @@
 <li>
   <div class="gif mdl-card mdl-shadow--2dp">
     <div class="mdl-card__title mdl-card--expand">
-      <img :src="gif.images.fixed_height.url" alt="" @click="expand" />
+      <img :src="gif.images.fixed_height.url" alt="" @click="expand" style="cursor: pointer;" />
     </div>
     <div class="mdl-card__actions">
       <!--<span class="filename">{{gif.slug}}</span>-->
       <p class="gif-title">{{gif.title}}</p>
-      <button v-if="this.$router.currentRoute.name === 'search' " class="material-icons favorite" style="margin-left:40%"
+      <button v-if="this.$router.currentRoute.name === 'search' " class="material-icons favorite" style="margin-left:40%; cursor: pointer;"
        @click="favorite">star</button>
        <span>{{warnMessage}}</span>
-       <button v-if="this.$router.currentRoute.name === 'favorites'" class="material-icons" style="margin-left:40%"
+       <button v-if="this.$router.currentRoute.name === 'favorites'" class="material-icons" style="margin-left:40%; cursor: pointer;"
        @click='unfavorite' id="clear">clear</button>
        <span id="delete-msg" v-if="this.$router.currentRoute.name === 'favorites'"></span>
     </div>
@@ -42,6 +42,7 @@ export default {
       }
     },
     expand () {
+      this.$store.dispatch('DISEXPAND')
       this.$store.dispatch('EXPAND', this.gif)
       this.$emit('expand')
     }
