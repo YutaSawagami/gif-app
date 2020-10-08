@@ -3,11 +3,11 @@
     <header class="mdl-layout__header">
       <div class="mdl-layout__header-row">
         <span class="mdl-layout-title">GIPHY-VUE</span>&nbsp;&nbsp;
-        <router-link :to="{name: 'favorites'}" class="link"> FAVORITE GIFS</router-link>&nbsp;&nbsp;&nbsp;
+        <router-link :to="{name: 'favorites'}" class="link" v-if="$store.state.login_user"> FAVORITE GIFS</router-link>&nbsp;&nbsp;&nbsp;
         <router-link :to="{name: 'search'}"  class="link"> SEARCH GIFS</router-link> &nbsp;&nbsp;&nbsp;
         <a @click="logout" class="log" v-if="$store.state.login_user" style="cursor: pointer;"> ログアウト </a>
         <a @click="login" class="log" v-else style="cursor: pointer;"> ログイン </a>
-        <span class="user-name" v-if="$store.state.login_user">ようこそ、{{login_user.displayName}}さん</span>
+        <span class="user-name" v-if="$store.state.login_user">ようこそ&nbsp;{{login_user.displayName}}さん</span>
         <span class="user-name" v-else>未ログイン状態</span>
       </div>
     </header>
@@ -23,6 +23,7 @@ export default {
     },
     logout () {
       this.$store.dispatch('LOGOUT')
+      this.$store.dispatch('DISEXPAND')
       this.$store.dispatch('CLEAN_FAVORITE_GIFS')
     }
   },

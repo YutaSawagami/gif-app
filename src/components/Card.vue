@@ -7,7 +7,7 @@
     <div class="mdl-card__actions">
       <!--<span class="filename">{{gif.slug}}</span>-->
       <p class="gif-title">{{gif.title}}</p>
-      <button v-if="this.$router.currentRoute.name === 'search' " class="material-icons favorite" style="margin-left:40%; cursor: pointer;"
+      <button v-if="this.$router.currentRoute.name === 'search' && $store.state.login_user" class="material-icons favorite" style="margin-left:40%; cursor: pointer;"
        @click="favorite">star</button>
        <span>{{warnMessage}}</span>
        <button v-if="this.$router.currentRoute.name === 'favorites'" class="material-icons" style="margin-left:40%; cursor: pointer;"

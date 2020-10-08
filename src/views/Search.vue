@@ -11,6 +11,9 @@ export default {
   components: {
     VueHeader,
     TimeLine
+  },
+  created () {
+    this.$store.dispatch('DISEXPAND')
   }
 }
 </script>

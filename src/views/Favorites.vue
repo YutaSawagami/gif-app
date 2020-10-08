@@ -22,24 +22,29 @@ export default {
   },
   data () {
     return {
-      isExpand: false
+      // isExpand: false
     }
   },
   created () {
-    this.$store.dispatch('CLEAN_FAVORITE_GIFS')
-    this.$store.dispatch('FETCH_GIFS')
-    console.log('created() FECTH_GIFS')
+    if (!this.$store.state.login_user) {
+      this.$router.push({ name: 'search' })
+    } else {
+      this.$store.dispatch('DISEXPAND')
+      this.$store.dispatch('CLEAN_FAVORITE_GIFS')
+      this.$store.dispatch('FETCH_GIFS')
+      console.log('created() FECTH_GIFS')
+    }
   },
   computed: {
-    ...mapGetters(['favorites', 'expandGif'])
+    ...mapGetters(['favorites', 'expandGif', 'isExpand'])
   },
   methods: {
     expand () {
       console.log('expand emit')
-      this.isExpand = true
+      // this.isExpand = true
     },
     disexpand () {
-      this.isExpand = false
+      // this.isExpand = false
     }
   }
 }

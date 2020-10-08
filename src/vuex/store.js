@@ -24,6 +24,7 @@ const state = {
   gifs: [],
   favorites: [],
   expandGif: [],
+  isExpand: false,
   login_user: null
 }
 
@@ -110,10 +111,12 @@ const mutations = {
   },
   [EXPAND] (state, gif) {
     state.expandGif.push(gif)
-    console.log(state.expandGif.length)
+    console.log(gif)
+    state.isExpand = true
   },
   [DISEXPAND] (state) {
     state.expandGif.length = 0
+    state.isExpand = false
     console.log(state.expandGif)
   },
   [FAVORITE] (state, index) {
@@ -147,7 +150,8 @@ const getters = {
   expandGif: state => state.expandGif,
   favorites: state => state.favorites,
   keyword: state => state.keyword,
-  login_user: state => state.login_user
+  login_user: state => state.login_user,
+  isExpand: state => state.isExpand
 }
 
 export default new Vuex.Store({

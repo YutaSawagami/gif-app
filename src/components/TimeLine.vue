@@ -25,21 +25,21 @@ export default {
   },
   data () {
     return {
-      isExpand: false,
+      // isExpand: false,
       isOpen: false
     }
   },
   methods: {
     expand () {
       console.log('expand emit')
-      this.isExpand = true
+      // this.isExpand = true
     },
     disexpand () {
-      this.isExpand = false
+      // this.isExpand = false
     }
   },
   computed: {
-    ...mapGetters(['gifs', 'expandGif'])
+    ...mapGetters(['gifs', 'expandGif', 'isExpand'])
   }
 }
 </script>
