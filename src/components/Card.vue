@@ -5,7 +5,6 @@
       <img :src="gif.images.fixed_height.url" alt="" @click="expand" style="cursor: pointer;" />
     </div>
     <div class="mdl-card__actions">
-      <!--<span class="filename">{{gif.slug}}</span>-->
       <p class="gif-title">{{gif.title}}</p>
       <button v-if="this.$router.currentRoute.name === 'search' && $store.state.login_user" class="material-icons favorite" style="margin-left:40%; cursor: pointer;"
        @click="favorite">star</button>
@@ -19,6 +18,7 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
 export default {
   data () {
     return {
@@ -29,16 +29,22 @@ export default {
   props: {
     gif: Object
   },
+  computed: {
+    ...mapGetters(['favoritePageSum', 'currentPage'])
+  },
   methods: {
     favorite () {
       if (confirm('お気に入り登録しますか？')) {
-        // this.isFavorite = !this.isFavorite
         this.$store.dispatch('FAVORITE', this.gif)
       }
     },
     unfavorite () {
       if (confirm('お気に入りから削除しますか？')) {
         this.$store.dispatch('DELETE', this.gif)
+        if (this.favoritePageSum < this.currentPage) {
+          // 削除した結果、ページ数が減り、現在のページが無くなる場合は前のページに戻るようにする
+          this.$store.dispatch('BACK_PAGE')
+        }
       }
     },
     expand () {

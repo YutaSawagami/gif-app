@@ -9,6 +9,11 @@
       </ul>
     </div>
     <p id="msg" v-if="favorites.length === 0">Search画面でお気に入り登録しよう！</p>
+    <p id="page-sum" v-if="favorites.length !== 0">
+      <button @click="backPage" class="page-arrow">&nbsp; &lt; &nbsp;</button>
+      &nbsp;&nbsp;{{currentPage}} of {{favoritePageSum}}&nbsp;&nbsp;
+      <button @click="nextPage" class="page-arrow">&nbsp; &gt; &nbsp;</button>
+    </p>
   </main>
 </template>
 <script>
@@ -20,11 +25,6 @@ export default {
     Card,
     ExpandGif
   },
-  data () {
-    return {
-      // isExpand: false
-    }
-  },
   created () {
     if (!this.$store.state.login_user) {
       this.$router.push({ name: 'search' })
@@ -32,19 +32,22 @@ export default {
       this.$store.dispatch('DISEXPAND')
       this.$store.dispatch('CLEAN_FAVORITE_GIFS')
       this.$store.dispatch('FETCH_GIFS')
-      console.log('created() FECTH_GIFS')
     }
   },
   computed: {
-    ...mapGetters(['favorites', 'expandGif', 'isExpand'])
+    ...mapGetters(['favorites', 'expandGif', 'isExpand', 'favoritePageSum', 'currentPage'])
   },
   methods: {
-    expand () {
-      console.log('expand emit')
-      // this.isExpand = true
+    backPage () {
+      if (this.$store.state.currentPage > 1) {
+        this.$store.dispatch('BACK_PAGE')
+      }
     },
-    disexpand () {
-      // this.isExpand = false
+    nextPage () {
+      if (this.favoritePageSum === this.$store.state.currentPage) {
+      } else {
+        this.$store.dispatch('NEXT_PAGE')
+      }
     }
   }
 }
@@ -68,5 +71,16 @@ ul li {
     top: 10%;
     left: 25%;
     display: block;
+  }
+  #page-sum {
+    text-align: center;
+    font-size: 20px;
+  }
+  .page-arrow {
+    font-size: 15px;
+    color:aliceblue;
+    background-color: rgb(63,81,181);
+    cursor: pointer;
+    border-radius:30px;
   }
 </style>

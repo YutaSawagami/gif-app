@@ -2,7 +2,8 @@ import Vuex from 'vuex'
 import Vue from 'vue'
 import firebase from 'firebase'
 import { CHANGE_KEYWORD, SEARCH, FAVORITE, DELETE, EXPAND, DISEXPAND, LOGIN, LOGOUT, SET_LOGIN_USER,
-  DELETE_LOGIN_USER, FETCH_GIFS, ADD_FAVORITE_GIFS, CLEAN_FAVORITE_GIFS } from './mutation-types'
+  DELETE_LOGIN_USER, FETCH_GIFS, ADD_FAVORITE_GIFS, CLEAN_FAVORITE_GIFS, NEXT_PAGE, BACK_PAGE,
+  BACK_TO_DEFAULT_PAGE } from './mutation-types'
 import axios from 'axios'
 
 Vue.use(Vuex)
@@ -25,7 +26,8 @@ const state = {
   favorites: [],
   expandGif: [],
   isExpand: false,
-  login_user: null
+  login_user: null,
+  currentPage: 1
 }
 
 const actions = {
@@ -33,7 +35,7 @@ const actions = {
     commit(CHANGE_KEYWORD, keyword)
   },
   [SEARCH] ({ commit, state }) {
-    axios.get('https://api.giphy.com/v1/gifs/search?q=' + state.keyword + '&api_key=6ttGOvcMC6k2CPxvCXv1qm2ijQRzZvP7&limit=52')
+    axios.get('https://api.giphy.com/v1/gifs/search?q=' + state.keyword + '&api_key=6ttGOvcMC6k2CPxvCXv1qm2ijQRzZvP7&limit=48')
       .then(response => {
         console.log(response.status) // 200
         commit(SEARCH, response.data.data)
@@ -47,33 +49,14 @@ const actions = {
   },
   [FAVORITE] ({ commit, getters }, gif) {
     const index = state.gifs.indexOf(gif)
-    console.log('index: ' + index)
     if (getters.login_user.uid) {
       gif.favoriteDate = new Date()
       firebase.firestore().collection(`users/${getters.login_user.uid}/gifs`).doc(gif.id).set(gif)
       commit(FAVORITE, index)
     }
-    /*
-    var douboutCount = 0
-    if (state.favorites.length !== 0) {
-      state.favorites.forEach((favoriteGif) => {
-        if (favoriteGif.id === gif.id) {
-          douboutCount++
-        }
-      })
-      if (douboutCount === 0) {
-        commit(FAVORITE, { gif, index })
-      } else {
-        return 400
-      }
-    } else {
-      commit(FAVORITE, { gif, index })
-    }
-    */
   },
   [DELETE] ({ commit, getters }, gif) {
     const index = state.favorites.indexOf(gif)
-    console.log('index = ' + index)
     if (getters.login_user.uid) {
       firebase.firestore().collection(`users/${state.login_user.uid}/gifs`).doc(gif.id).delete()
       commit(DELETE, index)
@@ -96,10 +79,20 @@ const actions = {
     firebase.firestore().collection(`users/${state.login_user.uid}/gifs`).orderBy('favoriteDate', 'desc').get().then(snapshot =>
       snapshot.forEach(doc => commit(ADD_FAVORITE_GIFS, doc.data()))
     )
-    console.log('action FETCH_GIFS')
   },
   [CLEAN_FAVORITE_GIFS] ({ commit }) {
     commit(CLEAN_FAVORITE_GIFS)
+  },
+  [NEXT_PAGE] ({ commit }) {
+    commit(NEXT_PAGE)
+  },
+  [BACK_PAGE] ({ commit }) {
+    if (state.currentPage > 1) {
+      commit(BACK_PAGE)
+    }
+  },
+  [BACK_TO_DEFAULT_PAGE] ({ commit }) {
+    commit(BACK_TO_DEFAULT_PAGE)
   }
 }
 const mutations = {
@@ -120,8 +113,6 @@ const mutations = {
     console.log(state.expandGif)
   },
   [FAVORITE] (state, index) {
-    // state.favorites.push(gif)
-    console.log('mutation index: ' + index)
     state.gifs.splice(index, 1)
   },
   [DELETE] (state, index) {
@@ -129,26 +120,37 @@ const mutations = {
   },
   [SET_LOGIN_USER] (state, user) {
     state.login_user = user
-    console.log('mutation SET LOGINUSER')
-    console.log(state.login_user)
   },
   [DELETE_LOGIN_USER] (state) {
-    console.log('mutation DELETE LOGINUSER')
     state.login_user = null
   },
   [ADD_FAVORITE_GIFS] (state, gif) {
     state.favorites.push(gif)
-    console.log('ADD_FAVORITE_GIFS')
   },
   [CLEAN_FAVORITE_GIFS] (state) {
     state.favorites = []
-    console.log('mutation CLEAN: ' + state.favorites)
+  },
+  [NEXT_PAGE] (state) {
+    state.currentPage += 1
+  },
+  [BACK_PAGE] (state) {
+    state.currentPage -= 1
+  },
+  [BACK_TO_DEFAULT_PAGE] (state) {
+    state.currentPage = 1
   }
 }
 const getters = {
   gifs: state => state.gifs,
   expandGif: state => state.expandGif,
-  favorites: state => state.favorites,
+  favorites: function (state) {
+    var page = state.currentPage
+    var firstParameter = (page - 1) * 8
+    var secondParameter = page * 8
+    return state.favorites.slice(firstParameter, secondParameter)
+  },
+  favoritePageSum: state => parseInt(state.favorites.length / 8.1) + 1,
+  currentPage: state => state.currentPage,
   keyword: state => state.keyword,
   login_user: state => state.login_user,
   isExpand: state => state.isExpand

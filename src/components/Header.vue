@@ -25,6 +25,7 @@ export default {
       this.$store.dispatch('LOGOUT')
       this.$store.dispatch('DISEXPAND')
       this.$store.dispatch('CLEAN_FAVORITE_GIFS')
+      this.$router.push({ name: 'search' })
     }
   },
   created () { // onAuthStateChangedはsignInWithRedirectの後にトリガされる

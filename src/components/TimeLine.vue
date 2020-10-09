@@ -2,9 +2,9 @@
   <main class="mdl-layout__content" >
     <div class="page-content" ><br>
       <input-form></input-form>
-          <expand-gif  v-if="this.isExpand" class="modal" @disexpand="disexpand"></expand-gif>
+          <expand-gif  v-if="this.isExpand" class="modal" ></expand-gif>
       <ul style="" id="content">
-      <card v-for="gif in gifs" :gif="gif" :key="gif.index" @expand="expand">
+      <card v-for="gif in gifs" :gif="gif" :key="gif.index" >
       </card>
       </ul>
       </div>
@@ -22,21 +22,6 @@ export default {
     InputForm,
     Card,
     ExpandGif
-  },
-  data () {
-    return {
-      // isExpand: false,
-      isOpen: false
-    }
-  },
-  methods: {
-    expand () {
-      console.log('expand emit')
-      // this.isExpand = true
-    },
-    disexpand () {
-      // this.isExpand = false
-    }
   },
   computed: {
     ...mapGetters(['gifs', 'expandGif', 'isExpand'])
